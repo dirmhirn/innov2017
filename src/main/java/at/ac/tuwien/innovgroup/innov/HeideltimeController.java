@@ -13,9 +13,7 @@ import de.unihd.dbs.heideltime.standalone.OutputType;
 import de.unihd.dbs.heideltime.standalone.POSTagger;
 import de.unihd.dbs.heideltime.standalone.exceptions.DocumentCreationTimeMissingException;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
-import org.thymeleaf.expression.Lists;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -33,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Bernhard on 11.06.2017.
@@ -59,7 +56,7 @@ public class HeideltimeController {
             Date dateDate = df.parse(date);
 
             HeidelTimeStandalone heidelTime = new HeidelTimeStandalone(
-                    Language.GERMAN,
+                    Language.ENGLISH,
                     DocumentType.NEWS,
                     OutputType.TIMEML,
                     "src/main/resources/config.props",
@@ -73,28 +70,24 @@ public class HeideltimeController {
             e.printStackTrace();
         }
 
-        System.out.println(result);
+        //System.out.println(result);
 
         String file = result;
 
 
         DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
         Document doc = dBuilder.parse(new InputSource(new StringReader(file)));
 
 
-        System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+        //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
         doc.normalize();
 
         if (doc.hasChildNodes()) {
-
             modNode(doc.getChildNodes(), list);
-
-
         }
 
-//Serialize DOM
+        //Serialize DOM
         OutputFormat format    = new OutputFormat (doc);
         // as a String
         StringWriter stringOut = new StringWriter ();
@@ -136,7 +129,7 @@ public class HeideltimeController {
             else if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
 
                 if ("TIMEX3".equals(tempNode.getNodeName())) {
-                    tempNode.setTextContent(tempNode.getTextContent() + "<span style=\"background-color: yellow;\">Date: " + tempNode.getAttributes().getNamedItem("value").getNodeValue() + "</span>");
+                    //tempNode.setTextContent(tempNode.getTextContent() + "<span style=\"background-color: yellow;\">Date: " + tempNode.getAttributes().getNamedItem("value").getNodeValue() + "</span>");
                     //System.out.println(tempNode.getTextContent() + "Date: " + tempNode.getAttributes().getNamedItem("value").getNodeValue());
 
                     tt.setText(tempNode.getAttributes().getNamedItem("value").getNodeValue());
